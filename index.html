@@ -669,7 +669,7 @@
             <option value="physics">⚡ Vật Lý</option>
             <option value="chemistry">🧪 Hóa Học</option>
             <option value="literature">📚 Ngữ Văn</option>
-            <option value="english">🎓 Tiếng Anh (IELTS 8.0)</option>
+            <option value="english">🎓 Tiếng Anh</option>
           </select>
           <div
             class="quick-chip"
@@ -739,7 +739,7 @@
       </div>
     </div>
 
-    <!-- SCRIPT FIREBASE (Fix Login Mobile) -->
+    <!-- SCRIPT FIREBASE (Đã sửa lỗi đăng nhập Cốc Cốc) -->
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
       import {
@@ -765,7 +765,7 @@
       const auth = getAuth(app);
       const provider = new GoogleAuthProvider();
 
-      // Kiểm tra kết quả sau khi Redirect (dành cho điện thoại)
+      // Kiểm tra xem có phải vừa redirect về không
       getRedirectResult(auth)
         .then((result) => {
           if (result) console.log("Đăng nhập thành công qua Redirect");
@@ -773,18 +773,12 @@
         .catch((error) => console.error(error));
 
       document.getElementById("btnLogin").addEventListener("click", () => {
-        // Phát hiện Mobile: Dùng Redirect thay vì Popup
-        const isMobile =
-          /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-            navigator.userAgent
-          );
-        if (isMobile) {
+        // Ưu tiên dùng Popup vì nó đẹp. Nếu Popup bị chặn (lỗi) thì mới dùng Redirect
+        signInWithPopup(auth, provider).catch((error) => {
+          // Nếu lỗi do trình duyệt chặn Popup (thường gặp trên Cốc Cốc Mobile)
+          console.log("Popup failed, trying redirect...", error);
           signInWithRedirect(auth, provider);
-        } else {
-          signInWithPopup(auth, provider).catch((error) =>
-            alert("Lỗi đăng nhập: " + error.message)
-          );
-        }
+        });
       });
 
       document.getElementById("btnLogout").addEventListener("click", () => {
@@ -805,11 +799,11 @@
       });
     </script>
 
-    <!-- SCRIPT AI (SỬ DỤNG LLAMA 3.3 MỚI NHẤT) -->
+    <!-- SCRIPT AI -->
     <script>
       const API_KEY =
         "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";
-      const MODEL_NAME = "llama-3.3-70b-versatile"; // Model mới, không bị lỗi
+      const MODEL_NAME = "llama-3.3-70b-versatile";
 
       function goToApp() {
         document.getElementById("home-page").style.display = "none";
@@ -823,16 +817,14 @@
       function toggleHistory() {
         const panel = document.getElementById("historyPanel");
         const overlay = document.getElementById("overlay");
-        // Kiểm tra class thay vì style để hoạt động tốt trên mobile
         if (panel.classList.contains("open")) {
           panel.classList.remove("open");
           overlay.style.display = "none";
-          // Hack CSS inline để đóng
           panel.style.right = "-100%";
         } else {
           panel.classList.add("open");
           overlay.style.display = "block";
-          panel.style.right = "0px"; // Mở ra
+          panel.style.right = "0px";
           loadHistory();
         }
       }
@@ -980,9 +972,8 @@
           document.getElementById("step2"),
           document.getElementById("step3"),
         ];
-
         const query = input.value.trim();
-        if (!query) return alert("Nhập câu hỏi đi bạn ơi!");
+        if (!query) return alert("Bạn chưa nhập câu hỏi!");
 
         window.speechSynthesis.cancel();
         resultArea.style.display = "none";
@@ -997,7 +988,7 @@
           let roleDesc = "Bạn là trợ lý học tập thông minh.";
           if (subject === "math")
             roleDesc =
-              "Bạn là giáo viên Toán kỹ tính. Giải bài tập từng bước, sử dụng dấu 'x' cho phép nhân, ':' cho phép chia, ',' cho số thập phân. Không dùng dấu sao (*).";
+              "Bạn là giáo viên Toán kỹ tính. Giải bài tập từng bước, sử dụng dấu 'x' cho phép nhân, ':' cho phép chia, ',' cho số thập phân.";
           if (subject === "physics")
             roleDesc =
               "Bạn là giáo viên Vật Lý. Hãy giải thích hiện tượng, nêu công thức và thay số chi tiết.";
