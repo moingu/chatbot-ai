@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>STEAM KHOA HỌC KỸ THUẬT</title>
+    <!-- Thư viện Markdown -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <!-- Font Nunito -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      /* --- CẤU HÌNH MÀU SẮC --- */
+      :root {
+        --primary-color: #00f2ff;
+        --secondary-color: #bd00ff;
+        --bg-deep: #050511;
+        --glass-bg: rgba(20, 20, 35, 0.85);
+        --glass-border: rgba(255, 255, 255, 0.1);
+        --text-color: #e2e8f0;
+      }
+
+      body {
+        font-family: "Nunito", sans-serif;
+        margin: 0;
+        min-height: 100vh;
+        background-color: var(--bg-deep);
+        color: var(--text-color);
+        overflow-x: hidden;
+      }
+
+      /* --- HIỆU ỨNG NỀN --- */
+      .orb {
+        position: fixed;
+        border-radius: 50%;
+        filter: blur(90px);
+        z-index: -2;
+        opacity: 0.4;
+        animation: floatOrb 20s infinite ease-in-out alternate;
+      }
+      .orb-1 {
+        top: -10%;
+        left: -10%;
+        width: 50vw;
+        height: 50vw;
+        background: var(--secondary-color);
+      }
+      .orb-2 {
+        bottom: -10%;
+        right: -10%;
+        width: 60vw;
+        height: 60vw;
+        background: #0044ff;
+        animation-delay: -5s;
+      }
+      .orb-3 {
+        top: 40%;
+        left: 40%;
+        width: 30vw;
+        height: 30vw;
+        background: var(--primary-color);
+        opacity: 0.2;
+        animation-delay: -10s;
+      }
+      @keyframes floatOrb {
+        0% {
+          transform: translate(0, 0) scale(1);
+        }
+        100% {
+          transform: translate(50px, 50px) scale(1.1);
+        }
+      }
+
+      .grid-bg {
+        position: fixed;
+        width: 200%;
+        height: 200%;
+        top: -50%;
+        left: -50%;
+        background-image: linear-gradient(
+            rgba(0, 242, 255, 0.05) 1px,
+            transparent 1px
+          ),
+          linear-gradient(90deg, rgba(0, 242, 255, 0.05) 1px, transparent 1px);
+        background-size: 50px 50px;
+        transform: perspective(500px) rotateX(60deg);
+        z-index: -1;
+        opacity: 0.3;
+        animation: gridMove 20s linear infinite;
+      }
+      @keyframes gridMove {
+        0% {
+          transform: perspective(500px) rotateX(60deg) translateY(0);
+        }
+        100% {
+          transform: perspective(500px) rotateX(60deg) translateY(50px);
+        }
+      }
+
+      /* --- HEADER --- */
+      .header-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: 15px 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: rgba(5, 5, 17, 0.8);
+        backdrop-filter: blur(15px);
+        border-bottom: 1px solid var(--glass-border);
+        z-index: 1000;
+        box-sizing: border-box;
+      }
+      .logo-small {
+        font-weight: 800;
+        font-size: 1.2rem;
+        color: var(--primary-color);
+        text-transform: uppercase;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-shadow: 0 0 15px rgba(0, 242, 255, 0.5);
+      }
+
+      .btn-google {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid var(--glass-border);
+        padding: 8px 20px;
+        border-radius: 30px;
+        color: white;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 700;
+        transition: 0.3s;
+      }
+      .btn-google:hover {
+        background: rgba(255, 255, 255, 0.15);
+        border-color: var(--primary-color);
+      }
+      .google-icon {
+        width: 18px;
+      }
+
+      .user-profile {
+        display: none;
+        align-items: center;
+        gap: 12px;
+        cursor: pointer;
+      }
+      .avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 2px solid var(--primary-color);
+        object-fit: cover;
+      }
+      .user-name {
+        font-weight: 700;
+        color: #fff;
+      }
+      .btn-logout {
+        color: #ff6b6b;
+        font-size: 0.8rem;
+        text-decoration: none;
+        cursor: pointer;
+      }
+
+      /* --- HISTORY SIDEBAR --- */
+      .history-panel {
+        position: fixed;
+        top: 0;
+        right: -350px;
+        width: 320px;
+        height: 100vh;
+        background: rgba(10, 15, 30, 0.98);
+        backdrop-filter: blur(20px);
+        box-shadow: -10px 0 30px rgba(0, 0, 0, 0.8);
+        border-left: 1px solid var(--glass-border);
+        z-index: 2000;
+        transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        padding: 25px;
+        display: flex;
+        flex-direction: column;
+        color: white;
+      }
+      .history-item {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 12px;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        cursor: pointer;
+        border-left: 3px solid transparent;
+        transition: 0.3s;
+      }
+      .history-item:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-left-color: var(--primary-color);
+      }
+      .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 1500;
+        display: none;
+        backdrop-filter: blur(3px);
+      }
+
+      /* --- MAIN LAYOUT --- */
+      #home-page,
+      #app-page {
+        padding-top: 100px;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+      #app-page {
+        display: none;
+        padding-bottom: 50px;
+      }
+
+      /* HERO BOX */
+      .hero-box {
+        background: var(--glass-bg);
+        backdrop-filter: blur(25px);
+        padding: 60px;
+        border-radius: 40px;
+        max-width: 900px;
+        margin-top: 20px;
+        width: 90%;
+        border: 1px solid var(--glass-border);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        animation: fadeIn 1s ease-out;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .hero-title {
+        font-size: 3.5rem;
+        font-weight: 900;
+        margin-bottom: 20px;
+        margin-top: 0;
+        background: linear-gradient(to right, #fff, var(--primary-color));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        filter: drop-shadow(0 0 20px rgba(0, 242, 255, 0.4));
+      }
+      .hero-desc {
+        font-size: 1.3rem;
+        color: #cbd5e1;
+        margin-bottom: 30px;
+        text-transform: uppercase;
+        font-weight: 700;
+      }
+      .student-intro {
+        font-style: italic;
+        color: #94a3b8;
+        background: rgba(0, 0, 0, 0.3);
+        padding: 20px;
+        border-radius: 15px;
+        border-left: 4px solid var(--secondary-color);
+        margin: 30px 0;
+      }
+      .btn-start {
+        background: linear-gradient(135deg, var(--secondary-color), #0044ff);
+        color: white;
+        padding: 15px 50px;
+        border-radius: 50px;
+        font-size: 1.3rem;
+        font-weight: 800;
+        border: none;
+        cursor: pointer;
+        transition: 0.3s;
+        box-shadow: 0 10px 30px rgba(189, 0, 255, 0.3);
+      }
+      .btn-start:hover {
+        transform: scale(1.05);
+        box-shadow: 0 15px 40px rgba(189, 0, 255, 0.5);
+      }
+
+      /* --- APP CHAT INTERFACE --- */
+      .app-container {
+        background: rgba(20, 20, 40, 0.8);
+        backdrop-filter: blur(30px);
+        padding: 30px;
+        border-radius: 30px;
+        width: 95%;
+        max-width: 900px;
+        position: relative;
+        border: 1px solid var(--glass-border);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+      }
+
+      .toolbar {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 15px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .subject-select {
+        background: rgba(0, 0, 0, 0.5);
+        border: 1px solid var(--glass-border);
+        color: white;
+        padding: 8px 15px;
+        border-radius: 20px;
+        outline: none;
+        font-family: inherit;
+        cursor: pointer;
+        min-width: 150px;
+      }
+      .subject-select:focus {
+        border-color: var(--primary-color);
+      }
+      .subject-select option {
+        background: #1a1a2e;
+        color: white;
+      }
+
+      .quick-chip {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--glass-border);
+        padding: 8px 15px;
+        border-radius: 20px;
+        color: #ccc;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: 0.2s;
+      }
+      .quick-chip:hover {
+        background: rgba(0, 242, 255, 0.1);
+        color: var(--primary-color);
+        border-color: var(--primary-color);
+      }
+
+      .search-box-wrapper {
+        display: flex;
+        gap: 10px;
+        background: rgba(0, 0, 0, 0.5);
+        padding: 8px;
+        border-radius: 50px;
+        border: 2px solid var(--glass-border);
+        margin-bottom: 20px;
+        transition: 0.3s;
+        align-items: center;
+      }
+      .search-box-wrapper:focus-within {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 15px rgba(0, 242, 255, 0.2);
+        background: rgba(0, 0, 0, 0.7);
+      }
+
+      input {
+        flex: 1;
+        padding: 10px 15px;
+        border: none;
+        background: transparent;
+        font-size: 1.1rem;
+        outline: none;
+        color: white;
+      }
+
+      .btn-action {
+        background: transparent;
+        border: none;
+        color: #aaa;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: 0.3s;
+        font-size: 1.1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .btn-action:hover {
+        color: white;
+        background: rgba(255, 255, 255, 0.1);
+      }
+      .btn-search {
+        background: var(--primary-color);
+        color: #000;
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .btn-search:hover {
+        transform: rotate(90deg);
+        background: white;
+        box-shadow: 0 0 15px white;
+      }
+      .mic-active {
+        color: #ff6b6b !important;
+        animation: pulse 1s infinite;
+      }
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.2);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      .process-area {
+        display: none;
+        text-align: left;
+        margin: 25px 0;
+      }
+      .step-item {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 12px;
+        margin-bottom: 12px;
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 12px;
+        opacity: 0;
+        transform: translateX(-20px);
+        transition: 0.5s;
+        color: #cbd5e1;
+      }
+      .step-active {
+        opacity: 1;
+        transform: translateX(0);
+        background: rgba(0, 242, 255, 0.1);
+        border-left: 4px solid var(--primary-color);
+        color: white;
+      }
+      .internet-step i {
+        color: #00e5ff;
+        animation: spin 2s linear infinite;
+      }
+      .robot-step i {
+        color: #facc15;
+        animation: bounce 1s infinite alternate;
+      }
+      .writing-step i {
+        color: #bd00ff;
+        animation: wobble 1s infinite;
+      }
+      @keyframes spin {
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+      @keyframes bounce {
+        to {
+          transform: translateY(-5px);
+        }
+      }
+      @keyframes wobble {
+        25% {
+          transform: rotate(-15deg);
+        }
+        75% {
+          transform: rotate(15deg);
+        }
+      }
+
+      .result-card {
+        background: rgba(0, 0, 0, 0.4);
+        text-align: left;
+        padding: 30px;
+        border-radius: 20px;
+        display: none;
+        line-height: 1.8;
+        border-top: 3px solid var(--secondary-color);
+        color: #e2e8f0;
+        font-size: 1.1rem;
+        position: relative;
+      }
+      .result-tools {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        display: flex;
+        gap: 5px;
+      }
+      .tool-btn {
+        background: rgba(255, 255, 255, 0.1);
+        border: none;
+        color: #ccc;
+        padding: 5px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 0.8rem;
+        transition: 0.2s;
+      }
+      .tool-btn:hover {
+        background: var(--primary-color);
+        color: black;
+      }
+
+      .result-card h1,
+      .result-card h2,
+      .result-card h3 {
+        color: var(--primary-color);
+        margin-top: 1.5em;
+      }
+      .result-card strong {
+        color: #facc15;
+      }
+      .result-card code {
+        background: #1e293b;
+        color: var(--primary-color);
+        padding: 3px 6px;
+        border-radius: 4px;
+        font-family: monospace;
+      }
+      .result-card a {
+        color: var(--secondary-color);
+      }
+      .result-card pre {
+        background: #1e293b;
+        padding: 15px;
+        border-radius: 10px;
+        overflow-x: auto;
+        border: 1px solid #333;
+      }
+
+      .icon-btn {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--glass-border);
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        cursor: pointer;
+        color: white;
+        transition: 0.3s;
+      }
+      .icon-btn:hover {
+        background: var(--primary-color);
+        color: black;
+        box-shadow: 0 0 10px var(--primary-color);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="grid-bg"></div>
+
+    <div class="header-bar">
+      <div class="logo-small">
+        <i class="fas fa-atom fa-spin"></i> STEAM KHOA HỌC KỸ THUẬT
+      </div>
+      <div id="login-area">
+        <button class="btn-google" id="btnLogin">
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"
+            class="google-icon"
+          />
+          Đăng nhập Google
+        </button>
+      </div>
+      <div id="user-area" class="user-profile">
+        <div style="text-align: right">
+          <div class="user-name" id="userName">Học sinh</div>
+          <div class="btn-logout" id="btnLogout">Đăng xuất</div>
+        </div>
+        <img
+          src=""
+          id="userAvatar"
+          class="avatar"
+          onclick="toggleHistory()"
+          title="Xem lịch sử"
+        />
+      </div>
+    </div>
+
+    <div class="overlay" id="overlay" onclick="toggleHistory()"></div>
+    <div class="history-panel" id="historyPanel">
+      <h3 style="color: var(--primary-color)">
+        <i class="fas fa-history"></i> Lịch sử tìm kiếm
+      </h3>
+      <div
+        id="historyList"
+        style="flex: 1; overflow-y: auto; margin-top: 10px"
+      ></div>
+      <div style="display: flex; gap: 10px; margin-top: 10px">
+        <button
+          onclick="clearHistory()"
+          style="
+            flex: 1;
+            padding: 10px;
+            background: rgba(239, 68, 68, 0.2);
+            color: #ff6b6b;
+            border: 1px solid #ff6b6b;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+          "
+        >
+          Xóa hết
+        </button>
+        <button
+          onclick="toggleHistory()"
+          style="
+            flex: 1;
+            padding: 10px;
+            background: transparent;
+            border: 1px solid #555;
+            color: #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+          "
+        >
+          Đóng
+        </button>
+      </div>
+    </div>
+
+    <div id="home-page">
+      <div class="hero-box">
+        <h1 class="hero-title">CHATBOT AI<br />HỖ TRỢ HỌC TẬP</h1>
+        <p class="hero-desc">
+          GIÚP HỌC SINH TÌM KIẾM CÁC CÔNG THỨC VÀ HỖ TRỢ HỌC TẬP
+        </p>
+        <p class="student-intro">
+          "Đây là dự án STEM tâm huyết của em - học sinh lớp 9H.<br />
+          Mong các thầy cô trải nghiệm, dùng thử và đưa ra ý kiến đóng góp ạ!"
+        </p>
+        <button class="btn-start" onclick="goToApp()">
+          TRẢI NGHIỆM NGAY <i class="fas fa-rocket"></i>
+        </button>
+      </div>
+    </div>
+
+    <div id="app-page">
+      <div class="app-container">
+        <button
+          onclick="goBackHome()"
+          class="icon-btn"
+          style="position: absolute; top: 20px; left: 20px"
+        >
+          <i class="fas fa-arrow-left"></i>
+        </button>
+        <button
+          onclick="toggleHistory()"
+          class="icon-btn"
+          style="position: absolute; top: 20px; right: 20px"
+        >
+          <i class="fas fa-history"></i>
+        </button>
+
+        <h2
+          style="
+            color: white;
+            text-align: center;
+            margin-top: 10px;
+            text-shadow: 0 0 10px var(--primary-color);
+          "
+        >
+          <i class="fas fa-robot" style="color: var(--primary-color)"></i> AI
+          biết tuốt
+        </h2>
+
+        <div class="toolbar">
+          <select id="subjectSelect" class="subject-select">
+            <option value="general">✨ Tổng hợp</option>
+            <option value="math">📐 Toán Học</option>
+            <option value="physics">⚡ Vật Lý</option>
+            <option value="chemistry">🧪 Hóa Học</option>
+            <option value="literature">📚 Ngữ Văn</option>
+            <option value="english">🎓 Tiếng Anh</option>
+          </select>
+          <div
+            class="quick-chip"
+            onclick="setInput('Tóm tắt nội dung bài học này:')"
+          >
+            📝 Tóm tắt
+          </div>
+          <div
+            class="quick-chip"
+            onclick="setInput('Giải chi tiết bài tập này giúp mình:')"
+          >
+            ✍️ Giải bài
+          </div>
+          <div
+            class="quick-chip"
+            onclick="setInput('Dịch đoạn sau sang tiếng Việt:')"
+          >
+            🌐 Dịch thuật
+          </div>
+        </div>
+
+        <div class="search-box-wrapper">
+          <input
+            type="text"
+            id="userInput"
+            placeholder="Nhập câu hỏi hoặc bấm micro để nói..."
+          />
+          <button
+            class="btn-action"
+            id="btnVoice"
+            onclick="startVoiceInput()"
+            title="Nói để nhập"
+          >
+            <i class="fas fa-microphone"></i>
+          </button>
+          <button
+            class="btn-action"
+            onclick="document.getElementById('userInput').value = ''"
+            title="Xóa"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+          <button class="btn-search" onclick="startSearch()">
+            <i class="fas fa-paper-plane"></i>
+          </button>
+        </div>
+
+        <div class="process-area" id="processArea">
+          <div class="step-item" id="step1">
+            <i class="fas fa-satellite-dish internet-step"></i
+            ><span>Kết nối tri thức nhân loại...</span>
+          </div>
+          <div class="step-item" id="step2">
+            <i class="fas fa-microchip robot-step"></i
+            ><span>AI đang phân tích dữ liệu...</span>
+          </div>
+          <div class="step-item" id="step3">
+            <i class="fas fa-pen-nib writing-step"></i
+            ><span>Đang soạn thảo câu trả lời...</span>
+          </div>
+        </div>
+
+        <div class="result-card" id="resultArea">
+          <div class="result-tools">
+            <button class="tool-btn" onclick="copyResult()">
+              <i class="fas fa-copy"></i> Copy
+            </button>
+            <button class="tool-btn" onclick="readResult()">
+              <i class="fas fa-volume-up"></i> Đọc
+            </button>
+          </div>
+          <div id="resultContent"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCRIPT FIREBASE -->
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+      import {
+        getAuth,
+        signInWithPopup,
+        GoogleAuthProvider,
+        signOut,
+        onAuthStateChanged,
+      } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+      const firebaseConfig = {
+        apiKey: "AIzaSyDKnzDwPfNFWBCi_NsNNRNLEozLGae-GD4",
+        authDomain: "stem-ai-login.firebaseapp.com",
+        projectId: "stem-ai-login",
+        storageBucket: "stem-ai-login.firebasestorage.app",
+        messagingSenderId: "10374330920",
+        appId: "1:10374330920:web:56295299ce45a23120131d",
+        measurementId: "G-MW7KMNN8CQ",
+      };
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const provider = new GoogleAuthProvider();
+      document.getElementById("btnLogin").addEventListener("click", () => {
+        signInWithPopup(auth, provider).catch((error) => alert(error.message));
+      });
+      document.getElementById("btnLogout").addEventListener("click", () => {
+        if (confirm("Đăng xuất nhé?")) signOut(auth);
+      });
+      onAuthStateChanged(auth, (user) => {
+        document.getElementById("login-area").style.display = user
+          ? "none"
+          : "block";
+        document.getElementById("user-area").style.display = user
+          ? "flex"
+          : "none";
+        if (user) {
+          document.getElementById("userName").innerText = user.displayName;
+          document.getElementById("userAvatar").src = user.photoURL;
+        }
+      });
+    </script>
+
+    <!-- SCRIPT XỬ LÝ CHÍNH (ĐÃ CẬP NHẬT MODEL MỚI NHẤT) -->
+    <script>
+      // SỬ DỤNG KEY GROQ CỦA BẠN (Cái key Google kia đang lỗi)
+      const API_KEY =
+        "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";
+
+      // ĐÃ THAY THẾ MODEL MIXTRAL CŨ BẰNG LLAMA 3.3 MỚI NHẤT
+      const MODEL_NAME = "llama-3.3-70b-versatile";
+
+      function goToApp() {
+        document.getElementById("home-page").style.display = "none";
+        document.getElementById("app-page").style.display = "flex";
+      }
+      function goBackHome() {
+        document.getElementById("app-page").style.display = "none";
+        document.getElementById("home-page").style.display = "flex";
+      }
+      function toggleHistory() {
+        const panel = document.getElementById("historyPanel");
+        const overlay = document.getElementById("overlay");
+        if (panel.style.right === "0px") {
+          panel.style.right = "-350px";
+          overlay.style.display = "none";
+        } else {
+          panel.style.right = "0px";
+          overlay.style.display = "block";
+          loadHistory();
+        }
+      }
+      function saveHistory(query, answer) {
+        let history = JSON.parse(localStorage.getItem("aiHistory") || "[]");
+        history.unshift({
+          query: query,
+          answer: answer,
+          time: new Date().toLocaleTimeString("vi-VN", {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+        });
+        if (history.length > 20) history.pop();
+        localStorage.setItem("aiHistory", JSON.stringify(history));
+      }
+      function loadHistory() {
+        let history = JSON.parse(localStorage.getItem("aiHistory") || "[]");
+        document.getElementById("historyList").innerHTML =
+          history.length === 0
+            ? '<div style="text-align:center; color:#666; margin-top:20px;">Trống trơn...</div>'
+            : history
+                .map(
+                  (item) =>
+                    `<div class="history-item" onclick="document.getElementById('userInput').value='${item.query.replace(
+                      /'/g,
+                      "\\'"
+                    )}'; toggleHistory(); startSearch()"><div style="font-size:0.8rem; color:#94a3b8;">${
+                      item.time
+                    }</div><div style="font-weight:700; color:#fff;">${
+                      item.query
+                    }</div></div>`
+                )
+                .join("");
+      }
+      function clearHistory() {
+        if (confirm("Xóa sạch lịch sử?")) {
+          localStorage.removeItem("aiHistory");
+          loadHistory();
+        }
+      }
+      function setInput(text) {
+        const input = document.getElementById("userInput");
+        input.value = text + " ";
+        input.focus();
+      }
+      function copyResult() {
+        const content = document.getElementById("resultContent").innerText;
+        navigator.clipboard
+          .writeText(content)
+          .then(() => alert("Đã copy nội dung!"));
+      }
+
+      // --- HÀM TÌM GIỌNG ĐỌC TỐT NHẤT ---
+      function getBestVoice(langCode) {
+        const voices = window.speechSynthesis.getVoices();
+        const prioritizedKeywords = [
+          "Google US English",
+          "Google UK English",
+          "Microsoft Zira",
+          "Samantha",
+          "Daniel",
+          "Natural",
+          "Premium",
+        ];
+
+        if (langCode.includes("en")) {
+          for (let keyword of prioritizedKeywords) {
+            const found = voices.find(
+              (v) => v.name.includes(keyword) && v.lang.includes("en")
+            );
+            if (found) return found;
+          }
+        }
+        return voices.find((v) => v.lang.includes(langCode)) || voices[0];
+      }
+
+      // --- HÀM ĐỌC VĂN BẢN (ĐÃ LỌC EMOJI + FIX GIỌNG ANH) ---
+      function readResult() {
+        let content = document.getElementById("resultContent").innerText;
+        // Xóa sạch emoji trước khi đọc để máy không đọc "mặt cười", "bút chì"
+        content = content.replace(
+          /[\u{1F600}-\u{1F6FF}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F900}-\u{1F9FF}\u{1F018}-\u{1F270}]/gu,
+          ""
+        );
+
+        window.speechSynthesis.cancel();
+        const speech = new SpeechSynthesisUtterance(content);
+
+        const subject = document.getElementById("subjectSelect").value;
+        let detectedLang = "vi-VN";
+
+        // ÉP CỨNG: Môn Anh là đọc tiếng Anh chuẩn Mỹ
+        if (subject === "english") {
+          detectedLang = "en-US";
+        } else {
+          // Môn khác thì đọc tiếng Việt
+          detectedLang = "vi-VN";
+        }
+        speech.lang = detectedLang;
+
+        if (window.speechSynthesis.getVoices().length === 0) {
+          window.speechSynthesis.onvoiceschanged = () => {
+            const voice = getBestVoice(detectedLang);
+            if (voice) speech.voice = voice;
+            window.speechSynthesis.speak(speech);
+          };
+        } else {
+          const voice = getBestVoice(detectedLang);
+          if (voice) speech.voice = voice;
+          // Chỉnh tốc độ giọng Anh cho sang
+          if (detectedLang === "en-US") {
+            speech.rate = 0.9;
+          }
+          window.speechSynthesis.speak(speech);
+        }
+      }
+
+      function startVoiceInput() {
+        const btn = document.getElementById("btnVoice");
+        if (!("webkitSpeechRecognition" in window)) {
+          alert("Chỉ hỗ trợ Chrome/Edge!");
+          return;
+        }
+        const recognition = new webkitSpeechRecognition();
+        const subject = document.getElementById("subjectSelect").value;
+        recognition.lang = subject === "english" ? "en-US" : "vi-VN";
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        recognition.onstart = () => {
+          btn.classList.add("mic-active");
+        };
+        recognition.onend = () => {
+          btn.classList.remove("mic-active");
+        };
+        recognition.onresult = (event) => {
+          document.getElementById("userInput").value =
+            event.results[0][0].transcript;
+          setTimeout(startSearch, 500);
+        };
+        recognition.start();
+      }
+
+      // --- LOGIC GỌI AI LLAMA 3.3 ---
+      async function startSearch() {
+        const input = document.getElementById("userInput");
+        const subject = document.getElementById("subjectSelect").value;
+        const process = document.getElementById("processArea");
+        const resultArea = document.getElementById("resultArea");
+        const resultContent = document.getElementById("resultContent");
+        const steps = [
+          document.getElementById("step1"),
+          document.getElementById("step2"),
+          document.getElementById("step3"),
+        ];
+
+        const query = input.value.trim();
+        if (!query) return alert("Nhập câu hỏi đi bạn ơi!");
+
+        window.speechSynthesis.cancel();
+
+        resultArea.style.display = "none";
+        resultContent.innerHTML = "";
+        process.style.display = "block";
+        steps.forEach((s) => s.classList.remove("step-active"));
+        setTimeout(() => steps[0].classList.add("step-active"), 100);
+        setTimeout(() => steps[1].classList.add("step-active"), 400);
+        setTimeout(() => steps[2].classList.add("step-active"), 800);
+
+        try {
+          // --- CẤU HÌNH PROMPT IELTS & SGK ---
+          let roleDesc = "Bạn là trợ lý học tập thông minh.";
+
+          if (subject === "math")
+            roleDesc =
+              "Bạn là giáo viên Toán kỹ tính. Giải bài tập từng bước, sử dụng dấu 'x' cho phép nhân, ':' cho phép chia, ',' cho số thập phân. Không dùng dấu sao (*).";
+          if (subject === "physics")
+            roleDesc =
+              "Bạn là giáo viên Vật Lý. Hãy giải thích hiện tượng, nêu công thức và thay số chi tiết.";
+          if (subject === "chemistry")
+            roleDesc =
+              "Bạn là giáo viên Hóa Học. Viết phương trình cân bằng rõ ràng.";
+          if (subject === "literature")
+            roleDesc =
+              "Bạn là giáo viên Ngữ Văn. Hãy phân tích cảm xúc, dùng từ ngữ hay, giàu hình ảnh.";
+
+          // HARDCORE IELTS MODE CHO MÔN ANH
+          if (subject === "english") {
+            roleDesc =
+              "STRICT INSTRUCTION: You are an IELTS Band 9.0 Examiner. Response MUST be in ENGLISH (C1/C2 level). Correct grammar errors strictly. Only use Vietnamese if the user explicitly asks 'Dịch sang tiếng việt' or 'Nghĩa là gì'.";
+          }
+
+          const systemPrompt = `
+            ${roleDesc}
+            Đối với các môn Toán, Lý, Hóa, Sinh, Sử, Địa: Luôn tuân thủ quy tắc SGK Việt Nam (Kết nối tri thức).
+            Trình bày bằng Markdown, dùng Emoji để bài học sinh động (nhưng không lạm dụng).
+          `;
+
+          const response = await fetch(
+            "https://api.groq.com/openai/v1/chat/completions",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${API_KEY}`,
+              },
+              body: JSON.stringify({
+                model: MODEL_NAME,
+                messages: [
+                  { role: "system", content: systemPrompt },
+                  { role: "user", content: query },
+                ],
+                temperature: 0.4,
+              }),
+            }
+          );
+
+          const data = await response.json();
+          if (data.error) throw new Error(data.error.message);
+          const text = data.choices[0].message.content;
+          saveHistory(query, text);
+          process.style.display = "none";
+          resultContent.innerHTML = marked.parse(text);
+          resultArea.style.display = "block";
+        } catch (e) {
+          console.error(e);
+          process.style.display = "none";
+          resultArea.style.display = "block";
+          resultContent.innerHTML = `<div style="color: #ff6b6b; border: 1px dashed red; padding: 15px; border-radius: 10px;">Lỗi: ${e.message}</div>`;
+        }
+      }
+      document.getElementById("userInput").addEventListener("keypress", (e) => {
+        if (e.key === "Enter") startSearch();
+      });
+    </script>
+  </body>
+</html>
