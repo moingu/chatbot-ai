@@ -7,7 +7,34 @@
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     />
     <title>STEAM KHOA HỌC KỸ THUẬT</title>
+
+    <!-- Thư viện Markdown -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <!-- Thư viện Hiển thị Toán Học (MathJax) - MỚI -->
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [
+            ["$", "$"],
+            ["\\(", "\\)"],
+          ],
+          displayMath: [
+            ["$$", "$$"],
+            ["\\[", "\\]"],
+          ],
+        },
+        svg: {
+          fontCache: "global",
+        },
+      };
+    </script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
@@ -525,6 +552,8 @@
       .result-card strong {
         color: #facc15;
       }
+
+      /* Cập nhật CSS cho MathJax để hiển thị đẹp hơn */
       .result-card code {
         background: #1e293b;
         color: var(--primary-color);
@@ -671,8 +700,8 @@
           GIÚP HỌC SINH TÌM KIẾM CÁC CÔNG THỨC VÀ HỖ TRỢ HỌC TẬP
         </p>
         <p class="student-intro">
-          "Đây là dự án STEM tâm huyết của em - học sinh lớp 9H.<br />Mong các
-          thầy cô trải nghiệm, dùng thử và đưa ra ý kiến đóng góp ạ!"
+          "Đây là dự án STEM tâm huyết của em - học sinh lớp 9H.<br />
+          Mong các thầy cô trải nghiệm, dùng thử và đưa ra ý kiến đóng góp ạ!"
         </p>
         <button class="btn-start" onclick="goToApp()">
           TRẢI NGHIỆM NGAY <i class="fas fa-rocket"></i>
@@ -789,15 +818,15 @@
         <div class="process-area" id="processArea">
           <div class="step-item" id="step1">
             <i class="fas fa-satellite-dish internet-step"></i
-            ><span>Kết nối tri thức...</span>
+            ><span>Kết nối tri thức nhân loại...</span>
           </div>
           <div class="step-item" id="step2">
             <i class="fas fa-microchip robot-step"></i
-            ><span>AI đang phân tích...</span>
+            ><span>AI đang phân tích dữ liệu...</span>
           </div>
           <div class="step-item" id="step3">
             <i class="fas fa-pen-nib writing-step"></i
-            ><span>Đang soạn thảo...</span>
+            ><span>Đang soạn thảo câu trả lời...</span>
           </div>
         </div>
 
@@ -987,14 +1016,17 @@
 
       function readResult() {
         let content = document.getElementById("resultContent").innerText;
+        // Xóa emoji trước khi đọc
         content = content.replace(
           /[\u{1F600}-\u{1F6FF}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F900}-\u{1F9FF}\u{1F018}-\u{1F270}]/gu,
           ""
         );
+
         window.speechSynthesis.cancel();
         const speech = new SpeechSynthesisUtterance(content);
         const subject = document.getElementById("subjectSelect").value;
         let detectedLang = "vi-VN";
+
         if (subject === "english") {
           detectedLang = "en-US";
         } else {
@@ -1003,6 +1035,7 @@
           detectedLang = vietnamesePattern.test(content) ? "vi-VN" : "en-US";
         }
         speech.lang = detectedLang;
+
         if (window.speechSynthesis.getVoices().length === 0) {
           window.speechSynthesis.onvoiceschanged = () => {
             const voice = getBestVoice(detectedLang);
@@ -1075,7 +1108,7 @@
           let roleDesc = "Bạn là trợ lý học tập thông minh.";
           if (subject === "math")
             roleDesc =
-              "Bạn là giáo viên Toán kỹ tính. Giải bài tập từng bước, sử dụng dấu 'x' cho phép nhân, ':' cho phép chia, ',' cho số thập phân.";
+              "Bạn là giáo viên Toán thân thiện. Giải bài tập từng bước, sử dụng định dạng LaTeX cho công thức toán (đặt trong dấu $ hoặc $$). Dùng dấu 'x' (nhân), ':' (chia), ',' (thập phân).";
           if (subject === "physics")
             roleDesc =
               "Bạn là giáo viên Vật Lý. Giải thích hiện tượng, công thức và thay số.";
@@ -1150,6 +1183,13 @@
           process.style.display = "none";
           resultContent.innerHTML = marked.parse(text);
           resultArea.style.display = "block";
+
+          // Kích hoạt MathJax để hiển thị công thức đẹp
+          if (window.MathJax) {
+            MathJax.typesetPromise([resultContent]).catch((err) =>
+              console.log(err)
+            );
+          }
         } catch (e) {
           console.error(e);
           process.style.display = "none";
