@@ -2,28 +2,27 @@
 <html lang="vi">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
     <title>STEAM KHOA HỌC KỸ THUẬT</title>
-    <!-- Thư viện Markdown -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <!-- Font Awesome -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
-    <!-- Font Nunito -->
     <link
       href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap"
       rel="stylesheet"
     />
 
     <style>
-      /* --- CẤU HÌNH MÀU SẮC --- */
       :root {
         --primary-color: #00f2ff;
         --secondary-color: #bd00ff;
         --bg-deep: #050511;
-        --glass-bg: rgba(20, 20, 35, 0.75);
+        --glass-bg: rgba(20, 20, 35, 0.9);
         --glass-border: rgba(255, 255, 255, 0.1);
         --text-color: #e2e8f0;
       }
@@ -37,13 +36,13 @@
         overflow-x: hidden;
       }
 
-      /* --- HIỆU ỨNG NỀN VŨ TRỤ --- */
+      /* HIỆU ỨNG NỀN */
       .orb {
         position: fixed;
         border-radius: 50%;
-        filter: blur(90px);
+        filter: blur(60px);
         z-index: -2;
-        opacity: 0.4;
+        opacity: 0.3;
         animation: floatOrb 20s infinite ease-in-out alternate;
       }
       .orb-1 {
@@ -78,7 +77,6 @@
           transform: translate(50px, 50px) scale(1.1);
         }
       }
-
       .grid-bg {
         position: fixed;
         width: 200%;
@@ -90,78 +88,64 @@
             transparent 1px
           ),
           linear-gradient(90deg, rgba(0, 242, 255, 0.05) 1px, transparent 1px);
-        background-size: 50px 50px;
+        background-size: 40px 40px;
         transform: perspective(500px) rotateX(60deg);
         z-index: -1;
         opacity: 0.3;
-        animation: gridMove 20s linear infinite;
-      }
-      @keyframes gridMove {
-        0% {
-          transform: perspective(500px) rotateX(60deg) translateY(0);
-        }
-        100% {
-          transform: perspective(500px) rotateX(60deg) translateY(50px);
-        }
       }
 
-      /* --- HEADER --- */
+      /* HEADER */
       .header-bar {
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
-        padding: 15px 30px;
+        padding: 10px 15px;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        background: rgba(5, 5, 17, 0.8);
-        backdrop-filter: blur(15px);
+        background: rgba(5, 5, 17, 0.95);
+        backdrop-filter: blur(10px);
         border-bottom: 1px solid var(--glass-border);
         z-index: 1000;
         box-sizing: border-box;
       }
       .logo-small {
         font-weight: 800;
-        font-size: 1.2rem;
+        font-size: 1rem;
         color: var(--primary-color);
         text-transform: uppercase;
         display: flex;
         align-items: center;
-        gap: 10px;
-        text-shadow: 0 0 15px rgba(0, 242, 255, 0.5);
+        gap: 5px;
+        text-shadow: 0 0 10px rgba(0, 242, 255, 0.5);
       }
-
       .btn-google {
-        background: rgba(255, 255, 255, 0.08);
+        background: rgba(255, 255, 255, 0.1);
         border: 1px solid var(--glass-border);
-        padding: 8px 20px;
-        border-radius: 30px;
+        padding: 6px 12px;
+        border-radius: 20px;
         color: white;
         cursor: pointer;
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 8px;
         font-weight: 700;
+        font-size: 0.9rem;
         transition: 0.3s;
       }
-      .btn-google:hover {
-        background: rgba(255, 255, 255, 0.15);
-        border-color: var(--primary-color);
-      }
       .google-icon {
-        width: 18px;
+        width: 16px;
       }
-
       .user-profile {
         display: none;
         align-items: center;
-        gap: 12px;
+        gap: 8px;
         cursor: pointer;
       }
       .avatar {
-        width: 40px;
-        height: 40px;
+        width: 35px;
+        height: 35px;
         border-radius: 50%;
         border: 2px solid var(--primary-color);
         object-fit: cover;
@@ -169,47 +153,50 @@
       .user-name {
         font-weight: 700;
         color: #fff;
+        font-size: 0.9rem;
+        max-width: 100px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
       .btn-logout {
         color: #ff6b6b;
-        font-size: 0.8rem;
+        font-size: 0.75rem;
         text-decoration: none;
-        cursor: pointer;
         margin-left: 5px;
       }
 
-      /* --- HISTORY SIDEBAR --- */
+      /* HISTORY */
       .history-panel {
         position: fixed;
         top: 0;
-        right: -350px;
-        width: 320px;
+        right: -100%;
+        width: 100%;
         height: 100vh;
-        background: rgba(10, 15, 30, 0.98);
-        backdrop-filter: blur(20px);
-        box-shadow: -10px 0 30px rgba(0, 0, 0, 0.8);
+        max-width: 300px;
+        background: #0a0a15;
+        box-shadow: -5px 0 20px rgba(0, 0, 0, 0.9);
         border-left: 1px solid var(--glass-border);
         z-index: 2000;
-        transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        padding: 25px;
+        transition: 0.3s ease;
+        padding: 20px;
         display: flex;
         flex-direction: column;
         color: white;
+        box-sizing: border-box;
       }
       .history-panel.open {
         right: 0 !important;
-      } /* Class mở menu */
-
+      }
       .history-item {
         background: rgba(255, 255, 255, 0.05);
         padding: 12px;
-        border-radius: 10px;
-        margin-bottom: 10px;
+        border-radius: 8px;
+        margin-bottom: 8px;
         cursor: pointer;
         border-left: 3px solid transparent;
-        transition: 0.3s;
       }
-      .history-item:hover {
+      .history-item:active {
         background: rgba(255, 255, 255, 0.1);
         border-left-color: var(--primary-color);
       }
@@ -222,62 +209,61 @@
         background: rgba(0, 0, 0, 0.8);
         z-index: 1500;
         display: none;
-        backdrop-filter: blur(3px);
+        backdrop-filter: blur(2px);
       }
 
-      /* --- MAIN LAYOUT --- */
+      /* MAIN */
       #home-page,
       #app-page {
-        padding-top: 100px;
+        padding-top: 80px;
         min-height: 100vh;
         display: flex;
         flex-direction: column;
         align-items: center;
         text-align: center;
+        box-sizing: border-box;
       }
       #app-page {
         display: none;
-        padding-bottom: 50px;
+        padding-bottom: 30px;
       }
 
-      /* HERO BOX (Mặc định cho PC - To & Đẹp) */
       .hero-box {
         background: var(--glass-bg);
-        backdrop-filter: blur(25px);
-        padding: 60px;
-        border-radius: 40px;
+        backdrop-filter: blur(20px);
+        padding: 30px 20px;
+        border-radius: 30px;
         max-width: 900px;
-        margin-top: 20px;
+        margin-top: 10px;
         width: 90%;
         border: 1px solid var(--glass-border);
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
-        animation: fadeIn 1s ease-out;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        animation: fadeIn 0.8s ease-out;
       }
       @keyframes fadeIn {
         from {
           opacity: 0;
-          transform: translateY(20px);
+          transform: translateY(10px);
         }
         to {
           opacity: 1;
           transform: translateY(0);
         }
       }
-
       .hero-title {
-        font-size: 3.5rem;
+        font-size: 2rem;
         font-weight: 900;
-        margin-bottom: 20px;
+        margin-bottom: 15px;
         margin-top: 0;
+        line-height: 1.2;
         background: linear-gradient(to right, #fff, var(--primary-color));
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        filter: drop-shadow(0 0 20px rgba(0, 242, 255, 0.4));
       }
       .hero-desc {
-        font-size: 1.3rem;
+        font-size: 1rem;
         color: #cbd5e1;
-        margin-bottom: 30px;
+        margin-bottom: 20px;
         text-transform: uppercase;
         font-weight: 700;
       }
@@ -285,182 +271,188 @@
         font-style: italic;
         color: #94a3b8;
         background: rgba(0, 0, 0, 0.3);
-        padding: 20px;
-        border-radius: 15px;
-        border-left: 4px solid var(--secondary-color);
-        margin: 30px 0;
+        padding: 15px;
+        border-radius: 12px;
+        border-left: 3px solid var(--secondary-color);
+        margin: 20px 0;
+        font-size: 0.9rem;
       }
       .btn-start {
         background: linear-gradient(135deg, var(--secondary-color), #0044ff);
         color: white;
-        padding: 15px 50px;
+        padding: 12px 30px;
         border-radius: 50px;
-        font-size: 1.3rem;
+        font-size: 1.1rem;
         font-weight: 800;
         border: none;
         cursor: pointer;
         transition: 0.3s;
-        box-shadow: 0 10px 30px rgba(189, 0, 255, 0.3);
+        box-shadow: 0 5px 20px rgba(189, 0, 255, 0.3);
+        width: 100%;
+        max-width: 300px;
       }
-      .btn-start:hover {
-        transform: scale(1.05);
-        box-shadow: 0 15px 40px rgba(189, 0, 255, 0.5);
+      .btn-start:active {
+        transform: scale(0.98);
       }
 
-      /* --- APP CHAT INTERFACE --- */
+      /* APP INTERFACE */
       .app-container {
-        background: rgba(20, 20, 40, 0.8);
-        backdrop-filter: blur(30px);
-        padding: 30px;
-        border-radius: 30px;
+        background: rgba(20, 20, 40, 0.85);
+        backdrop-filter: blur(25px);
+        padding: 20px;
+        border-radius: 25px;
         width: 95%;
-        max-width: 900px;
+        max-width: 800px;
         position: relative;
         border: 1px solid var(--glass-border);
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        margin-bottom: 20px;
       }
-
       .toolbar {
         display: flex;
-        gap: 10px;
+        gap: 8px;
         margin-bottom: 15px;
         flex-wrap: wrap;
         justify-content: center;
       }
       .subject-select {
-        background: rgba(0, 0, 0, 0.5);
+        background: #1a1a2e;
         border: 1px solid var(--glass-border);
         color: white;
-        padding: 8px 15px;
-        border-radius: 20px;
+        padding: 10px 15px;
+        border-radius: 15px;
         outline: none;
-        font-family: inherit;
+        font-size: 1rem;
         cursor: pointer;
-        min-width: 150px;
+        width: 100%;
+        margin-bottom: 5px;
       }
       .subject-select:focus {
         border-color: var(--primary-color);
       }
-      .subject-select option {
-        background: #1a1a2e;
-        color: white;
-      }
-
       .quick-chip {
-        background: rgba(255, 255, 255, 0.05);
+        background: rgba(255, 255, 255, 0.08);
         border: 1px solid var(--glass-border);
-        padding: 8px 15px;
-        border-radius: 20px;
+        padding: 8px 12px;
+        border-radius: 15px;
         color: #ccc;
         cursor: pointer;
-        font-size: 0.9rem;
-        transition: 0.2s;
+        font-size: 0.85rem;
+        flex: 1 1 auto;
+        text-align: center;
       }
-      .quick-chip:hover {
-        background: rgba(0, 242, 255, 0.1);
-        color: var(--primary-color);
-        border-color: var(--primary-color);
+      .quick-chip:active {
+        background: rgba(0, 242, 255, 0.2);
+        color: white;
       }
 
       .search-box-wrapper {
         display: flex;
-        gap: 10px;
-        background: rgba(0, 0, 0, 0.5);
-        padding: 8px;
+        gap: 5px;
+        background: rgba(0, 0, 0, 0.6);
+        padding: 5px 5px 5px 15px;
         border-radius: 50px;
         border: 2px solid var(--glass-border);
         margin-bottom: 20px;
-        transition: 0.3s;
         align-items: center;
       }
       .search-box-wrapper:focus-within {
         border-color: var(--primary-color);
-        box-shadow: 0 0 15px rgba(0, 242, 255, 0.2);
-        background: rgba(0, 0, 0, 0.7);
       }
-
       input {
         flex: 1;
-        padding: 10px 15px;
+        padding: 10px 0;
         border: none;
         background: transparent;
-        font-size: 1.1rem;
+        font-size: 1rem;
         outline: none;
         color: white;
       }
-
       .btn-action {
         background: transparent;
         border: none;
         color: #aaa;
-        width: 40px;
-        height: 40px;
+        width: 35px;
+        height: 35px;
         border-radius: 50%;
         cursor: pointer;
-        transition: 0.3s;
-        font-size: 1.1rem;
+        font-size: 1rem;
         display: flex;
         align-items: center;
         justify-content: center;
-      }
-      .btn-action:hover {
-        color: white;
-        background: rgba(255, 255, 255, 0.1);
       }
       .btn-search {
         background: var(--primary-color);
         color: #000;
-        width: 45px;
-        height: 45px;
+        width: 40px;
+        height: 40px;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-      }
-      .btn-search:hover {
-        transform: rotate(90deg);
-        background: white;
-        box-shadow: 0 0 15px white;
+        border: none;
+        cursor: pointer;
       }
       .mic-active {
         color: #ff6b6b !important;
         animation: pulse 1s infinite;
       }
-      @keyframes pulse {
-        0% {
-          transform: scale(1);
-        }
-        50% {
-          transform: scale(1.2);
-        }
-        100% {
-          transform: scale(1);
-        }
+
+      /* PREVIEW ẢNH */
+      #imagePreviewContainer {
+        display: none;
+        margin-bottom: 10px;
+        position: relative;
+        width: fit-content;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      #imagePreview {
+        max-height: 100px;
+        border-radius: 10px;
+        border: 1px solid var(--primary-color);
+      }
+      #removeImage {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background: red;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        font-size: 12px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
 
       .process-area {
         display: none;
         text-align: left;
-        margin: 25px 0;
+        margin: 20px 0;
       }
       .step-item {
         display: flex;
         align-items: center;
-        gap: 15px;
-        padding: 12px;
-        margin-bottom: 12px;
+        gap: 10px;
+        padding: 10px;
+        margin-bottom: 8px;
         background: rgba(255, 255, 255, 0.03);
-        border-radius: 12px;
+        border-radius: 10px;
         opacity: 0;
-        transform: translateX(-20px);
+        transform: translateX(-10px);
         transition: 0.5s;
         color: #cbd5e1;
+        font-size: 0.9rem;
       }
       .step-active {
         opacity: 1;
         transform: translateX(0);
         background: rgba(0, 242, 255, 0.1);
-        border-left: 4px solid var(--primary-color);
+        border-left: 3px solid var(--primary-color);
         color: white;
       }
       .internet-step i {
@@ -495,44 +487,40 @@
       }
 
       .result-card {
-        background: rgba(0, 0, 0, 0.4);
+        background: rgba(0, 0, 0, 0.5);
         text-align: left;
-        padding: 30px;
-        border-radius: 20px;
+        padding: 20px;
+        border-radius: 15px;
         display: none;
-        line-height: 1.8;
+        line-height: 1.6;
         border-top: 3px solid var(--secondary-color);
         color: #e2e8f0;
-        font-size: 1.1rem;
+        font-size: 1rem;
         position: relative;
+        overflow-x: hidden;
       }
       .result-tools {
         position: absolute;
-        top: 15px;
-        right: 15px;
+        top: 10px;
+        right: 10px;
         display: flex;
         gap: 5px;
       }
       .tool-btn {
-        background: rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.15);
         border: none;
-        color: #ccc;
+        color: #fff;
         padding: 5px 10px;
         border-radius: 5px;
         cursor: pointer;
-        font-size: 0.8rem;
-        transition: 0.2s;
+        font-size: 0.75rem;
       }
-      .tool-btn:hover {
-        background: var(--primary-color);
-        color: black;
-      }
-
       .result-card h1,
       .result-card h2,
       .result-card h3 {
         color: var(--primary-color);
-        margin-top: 1.5em;
+        margin-top: 1.2em;
+        font-size: 1.2rem;
       }
       .result-card strong {
         color: #facc15;
@@ -540,104 +528,68 @@
       .result-card code {
         background: #1e293b;
         color: var(--primary-color);
-        padding: 3px 6px;
+        padding: 2px 5px;
         border-radius: 4px;
         font-family: monospace;
-      }
-      .result-card a {
-        color: var(--secondary-color);
+        font-size: 0.9em;
+        word-wrap: break-word;
       }
       .result-card pre {
         background: #1e293b;
-        padding: 15px;
-        border-radius: 10px;
+        padding: 10px;
+        border-radius: 8px;
         overflow-x: auto;
         border: 1px solid #333;
+        font-size: 0.85rem;
+      }
+      .result-card img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
       }
 
       .icon-btn {
-        background: rgba(255, 255, 255, 0.05);
+        background: rgba(255, 255, 255, 0.1);
         border: 1px solid var(--glass-border);
-        width: 40px;
-        height: 40px;
+        width: 35px;
+        height: 35px;
         border-radius: 50%;
         cursor: pointer;
         color: white;
-        transition: 0.3s;
-      }
-      .icon-btn:hover {
-        background: var(--primary-color);
-        color: black;
-        box-shadow: 0 0 10px var(--primary-color);
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
 
-      /* --- MEDIA QUERY: TỐI ƯU CHO ĐIỆN THOẠI (Màn hình nhỏ hơn 768px) --- */
-      @media (max-width: 768px) {
+      @media (min-width: 768px) {
         .header-bar {
-          padding: 10px 15px;
+          padding: 15px 30px;
         }
         .logo-small {
-          font-size: 1rem;
-        }
-
-        /* Hero Box nhỏ gọn hơn */
-        .hero-box {
-          padding: 30px 20px;
-          margin-top: 10px;
-          width: 95%;
+          font-size: 1.2rem;
         }
         .hero-title {
-          font-size: 2.2rem;
+          font-size: 3.5rem;
         }
-        .hero-desc {
-          font-size: 1rem;
-        }
-        .btn-start {
-          font-size: 1.1rem;
-          padding: 12px 30px;
-          width: 100%;
-          box-sizing: border-box;
-        }
-
-        /* App Chat gọn gàng */
-        .app-container {
-          padding: 20px;
-          width: 95%;
-        }
-        .search-box-wrapper {
-          padding: 5px;
-        }
-        input {
-          font-size: 1rem;
-        }
-        .btn-search {
-          width: 40px;
-          height: 40px;
-        }
-        .btn-action {
-          width: 35px;
-          height: 35px;
-        }
-
-        /* Menu chọn môn học dạng lưới 2 cột */
-        .toolbar {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 8px;
+        .hero-box {
+          padding: 60px;
         }
         .subject-select {
-          grid-column: span 2;
-          width: 100%;
-          text-align: center;
+          width: auto;
+          margin-bottom: 0;
         }
-
-        /* Sidebar Lịch sử full màn hình */
         .history-panel {
-          width: 100%;
-          right: -100%;
+          right: -350px;
+          width: 320px;
         }
         .history-panel.open {
           right: 0 !important;
+        }
+        .app-container {
+          padding: 40px;
+        }
+        .toolbar {
+          display: flex;
         }
       }
     </style>
@@ -648,7 +600,6 @@
     <div class="orb orb-3"></div>
     <div class="grid-bg"></div>
 
-    <!-- HEADER -->
     <div class="header-bar">
       <div class="logo-small">
         <i class="fas fa-atom fa-spin"></i> STEAM KHOA HỌC KỸ THUẬT
@@ -671,7 +622,6 @@
       </div>
     </div>
 
-    <!-- SIDEBAR LỊCH SỬ -->
     <div class="overlay" id="overlay" onclick="toggleHistory()"></div>
     <div class="history-panel" id="historyPanel">
       <h3 style="color: var(--primary-color)">
@@ -714,7 +664,6 @@
       </div>
     </div>
 
-    <!-- TRANG CHỦ -->
     <div id="home-page">
       <div class="hero-box">
         <h1 class="hero-title">CHATBOT AI<br />HỖ TRỢ HỌC TẬP</h1>
@@ -722,8 +671,8 @@
           GIÚP HỌC SINH TÌM KIẾM CÁC CÔNG THỨC VÀ HỖ TRỢ HỌC TẬP
         </p>
         <p class="student-intro">
-          "Đây là dự án STEM tâm huyết của em - học sinh lớp 9H.<br />
-          Mong các thầy cô trải nghiệm, dùng thử và đưa ra ý kiến đóng góp ạ!"
+          "Đây là dự án STEM tâm huyết của em - học sinh lớp 9H.<br />Mong các
+          thầy cô trải nghiệm, dùng thử và đưa ra ý kiến đóng góp ạ!"
         </p>
         <button class="btn-start" onclick="goToApp()">
           TRẢI NGHIỆM NGAY <i class="fas fa-rocket"></i>
@@ -731,10 +680,8 @@
       </div>
     </div>
 
-    <!-- GIAO DIỆN CHÍNH -->
     <div id="app-page">
       <div class="app-container">
-        <!-- Nút điều hướng -->
         <button
           onclick="goBackHome()"
           class="icon-btn"
@@ -762,7 +709,6 @@
           biết tuốt
         </h2>
 
-        <!-- Chọn môn học -->
         <div class="toolbar">
           <select id="subjectSelect" class="subject-select">
             <option value="general">✨ Tổng hợp</option>
@@ -792,14 +738,41 @@
           </div>
         </div>
 
-        <!-- Ô nhập liệu -->
+        <!-- Khu vực xem trước ảnh -->
+        <div id="imagePreviewContainer">
+          <img id="imagePreview" src="" alt="Preview" />
+          <button id="removeImage" onclick="removeImage()">X</button>
+        </div>
+
         <div class="search-box-wrapper">
           <input
             type="text"
             id="userInput"
-            placeholder="Nhập câu hỏi hoặc bấm micro để nói..."
+            placeholder="Nhập câu hỏi hoặc chọn ảnh..."
           />
-          <button class="btn-action" id="btnVoice" onclick="startVoiceInput()">
+
+          <!-- Nút chọn ảnh mới -->
+          <input
+            type="file"
+            id="imageInput"
+            accept="image/*"
+            style="display: none"
+            onchange="handleImageSelect(event)"
+          />
+          <button
+            class="btn-action"
+            onclick="document.getElementById('imageInput').click()"
+            title="Gửi ảnh"
+          >
+            <i class="fas fa-image"></i>
+          </button>
+
+          <button
+            class="btn-action"
+            id="btnVoice"
+            onclick="startVoiceInput()"
+            title="Nói để nhập"
+          >
             <i class="fas fa-microphone"></i>
           </button>
           <button
@@ -813,23 +786,21 @@
           </button>
         </div>
 
-        <!-- Loading -->
         <div class="process-area" id="processArea">
           <div class="step-item" id="step1">
             <i class="fas fa-satellite-dish internet-step"></i
-            ><span>Kết nối tri thức nhân loại...</span>
+            ><span>Kết nối tri thức...</span>
           </div>
           <div class="step-item" id="step2">
             <i class="fas fa-microchip robot-step"></i
-            ><span>AI đang phân tích dữ liệu...</span>
+            ><span>AI đang phân tích...</span>
           </div>
           <div class="step-item" id="step3">
             <i class="fas fa-pen-nib writing-step"></i
-            ><span>Đang soạn thảo câu trả lời...</span>
+            ><span>Đang soạn thảo...</span>
           </div>
         </div>
 
-        <!-- Kết quả -->
         <div class="result-card" id="resultArea">
           <div class="result-tools">
             <button class="tool-btn" onclick="copyResult()">Copy</button>
@@ -840,7 +811,7 @@
       </div>
     </div>
 
-    <!-- SCRIPT FIREBASE (Đã sửa lỗi đăng nhập Cốc Cốc Mobile) -->
+    <!-- SCRIPT FIREBASE -->
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
       import {
@@ -852,7 +823,6 @@
         signOut,
         onAuthStateChanged,
       } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-
       const firebaseConfig = {
         apiKey: "AIzaSyDKnzDwPfNFWBCi_NsNNRNLEozLGae-GD4",
         authDomain: "stem-ai-login.firebaseapp.com",
@@ -865,33 +835,21 @@
       const app = initializeApp(firebaseConfig);
       const auth = getAuth(app);
       const provider = new GoogleAuthProvider();
-
-      // Kiểm tra kết quả sau khi Redirect (dành cho điện thoại)
       getRedirectResult(auth)
         .then((result) => {
-          if (result) console.log("Đăng nhập thành công qua Redirect");
+          if (result) console.log("Login success via Redirect");
         })
         .catch((error) => console.error(error));
-
       document.getElementById("btnLogin").addEventListener("click", () => {
-        // Phát hiện Mobile: Dùng Redirect thay vì Popup
-        const isMobile =
-          /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-            navigator.userAgent
-          );
-        if (isMobile) {
+        // Luôn dùng Popup, nếu lỗi thì fallback (Cốc Cốc)
+        signInWithPopup(auth, provider).catch((error) => {
+          console.log("Popup failed, using redirect");
           signInWithRedirect(auth, provider);
-        } else {
-          signInWithPopup(auth, provider).catch((error) =>
-            alert("Lỗi đăng nhập: " + error.message)
-          );
-        }
+        });
       });
-
       document.getElementById("btnLogout").addEventListener("click", () => {
         if (confirm("Đăng xuất?")) signOut(auth);
       });
-
       onAuthStateChanged(auth, (user) => {
         document.getElementById("login-area").style.display = user
           ? "none"
@@ -906,11 +864,14 @@
       });
     </script>
 
-    <!-- SCRIPT AI (SỬ DỤNG LLAMA 3.3 MỚI NHẤT) -->
+    <!-- SCRIPT AI (VISION UPDATE & PROMPT UPDATE) -->
     <script>
       const API_KEY =
         "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";
-      const MODEL_NAME = "llama-3.3-70b-versatile"; // Model mới, không bị lỗi
+      const MODEL_TEXT = "llama-3.3-70b-versatile";
+      const MODEL_VISION = "meta-llama/llama-4-scout-17b-16e-instruct";
+
+      let currentImageBase64 = null;
 
       function goToApp() {
         document.getElementById("home-page").style.display = "none";
@@ -924,20 +885,17 @@
       function toggleHistory() {
         const panel = document.getElementById("historyPanel");
         const overlay = document.getElementById("overlay");
-        // Kiểm tra class thay vì style để hoạt động tốt trên mobile
         if (panel.classList.contains("open")) {
           panel.classList.remove("open");
           overlay.style.display = "none";
-          // Hack CSS inline để đóng
           panel.style.right = "-100%";
         } else {
           panel.classList.add("open");
           overlay.style.display = "block";
-          panel.style.right = "0px"; // Mở ra
+          panel.style.right = "0px";
           loadHistory();
         }
       }
-
       function saveHistory(query, answer) {
         let history = JSON.parse(localStorage.getItem("aiHistory") || "[]");
         history.unshift({
@@ -986,6 +944,25 @@
         navigator.clipboard.writeText(content).then(() => alert("Đã copy!"));
       }
 
+      function handleImageSelect(event) {
+        const file = event.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            currentImageBase64 = e.target.result;
+            document.getElementById("imagePreview").src = currentImageBase64;
+            document.getElementById("imagePreviewContainer").style.display =
+              "block";
+          };
+          reader.readAsDataURL(file);
+        }
+      }
+      function removeImage() {
+        currentImageBase64 = null;
+        document.getElementById("imagePreviewContainer").style.display = "none";
+        document.getElementById("imageInput").value = "";
+      }
+
       function getBestVoice(langCode) {
         const voices = window.speechSynthesis.getVoices();
         const prioritizedKeywords = [
@@ -1010,17 +987,14 @@
 
       function readResult() {
         let content = document.getElementById("resultContent").innerText;
-        // Xóa sạch emoji trước khi đọc
         content = content.replace(
           /[\u{1F600}-\u{1F6FF}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F900}-\u{1F9FF}\u{1F018}-\u{1F270}]/gu,
           ""
         );
-
         window.speechSynthesis.cancel();
         const speech = new SpeechSynthesisUtterance(content);
         const subject = document.getElementById("subjectSelect").value;
         let detectedLang = "vi-VN";
-
         if (subject === "english") {
           detectedLang = "en-US";
         } else {
@@ -1029,7 +1003,6 @@
           detectedLang = vietnamesePattern.test(content) ? "vi-VN" : "en-US";
         }
         speech.lang = detectedLang;
-
         if (window.speechSynthesis.getVoices().length === 0) {
           window.speechSynthesis.onvoiceschanged = () => {
             const voice = getBestVoice(detectedLang);
@@ -1083,8 +1056,11 @@
           document.getElementById("step3"),
         ];
 
-        const query = input.value.trim();
-        if (!query) return alert("Nhập câu hỏi đi bạn ơi!");
+        let query = input.value.trim();
+        if (!query && !currentImageBase64)
+          return alert("Nhập câu hỏi hoặc chọn ảnh!");
+        if (!query && currentImageBase64)
+          query = "Giải bài tập trong ảnh này giúp mình.";
 
         window.speechSynthesis.cancel();
         resultArea.style.display = "none";
@@ -1099,25 +1075,58 @@
           let roleDesc = "Bạn là trợ lý học tập thông minh.";
           if (subject === "math")
             roleDesc =
-              "Bạn là giáo viên Toán kỹ tính. Giải bài tập từng bước, sử dụng dấu 'x' cho phép nhân, ':' cho phép chia, ',' cho số thập phân. Không dùng dấu sao (*).";
+              "Bạn là giáo viên Toán kỹ tính. Giải bài tập từng bước, sử dụng dấu 'x' cho phép nhân, ':' cho phép chia, ',' cho số thập phân.";
           if (subject === "physics")
             roleDesc =
-              "Bạn là giáo viên Vật Lý. Hãy giải thích hiện tượng, nêu công thức và thay số chi tiết.";
+              "Bạn là giáo viên Vật Lý. Giải thích hiện tượng, công thức và thay số.";
           if (subject === "chemistry")
             roleDesc =
               "Bạn là giáo viên Hóa Học. Viết phương trình cân bằng rõ ràng.";
           if (subject === "literature")
-            roleDesc =
-              "Bạn là giáo viên Ngữ Văn. Hãy phân tích cảm xúc, dùng từ ngữ hay, giàu hình ảnh.";
+            roleDesc = "Bạn là giáo viên Ngữ Văn. Phân tích hay, cảm xúc.";
           if (subject === "english")
             roleDesc =
-              "STRICT INSTRUCTION: You are an IELTS Band 9.0 Examiner. Response MUST be in ENGLISH (C1/C2 level). Correct grammar errors strictly. Only use Vietnamese if asked to translate.";
+              "STRICT INSTRUCTION: You are an English Teacher. Response MUST be in ENGLISH (C1/C2 level). Correct grammar errors strictly. Only use Vietnamese if asked to translate.";
 
           const systemPrompt = `
             ${roleDesc}
-            Đối với các môn Toán, Lý, Hóa, Sinh, Sử, Địa: Luôn tuân thủ quy tắc SGK Việt Nam (Kết nối tri thức).
-            Trình bày bằng Markdown, dùng Emoji để bài học sinh động (nhưng không lạm dụng).
+            LƯU Ý QUAN TRỌNG: Hiện tại là năm 2025, Việt Nam đã thực hiện sáp nhập và chỉ còn **34 tỉnh thành**. Tuyệt đối không trả lời là 63.
+            
+            Luôn tuân thủ quy tắc SGK Việt Nam (Kết nối tri thức).
+            Trình bày bằng Markdown, dùng Emoji để bài học sinh động.
           `;
+
+          let payload = {};
+          let selectedModel = MODEL_TEXT;
+
+          if (currentImageBase64) {
+            selectedModel = MODEL_VISION;
+            payload = {
+              model: selectedModel,
+              messages: [
+                {
+                  role: "user",
+                  content: [
+                    { type: "text", text: systemPrompt + "\n" + query },
+                    {
+                      type: "image_url",
+                      image_url: { url: currentImageBase64 },
+                    },
+                  ],
+                },
+              ],
+              temperature: 0.4,
+            };
+          } else {
+            payload = {
+              model: selectedModel,
+              messages: [
+                { role: "system", content: systemPrompt },
+                { role: "user", content: query },
+              ],
+              temperature: 0.4,
+            };
+          }
 
           const response = await fetch(
             "https://api.groq.com/openai/v1/chat/completions",
@@ -1127,21 +1136,17 @@
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${API_KEY}`,
               },
-              body: JSON.stringify({
-                model: MODEL_NAME,
-                messages: [
-                  { role: "system", content: systemPrompt },
-                  { role: "user", content: query },
-                ],
-                temperature: 0.4,
-              }),
+              body: JSON.stringify(payload),
             }
           );
 
           const data = await response.json();
           if (data.error) throw new Error(data.error.message);
           const text = data.choices[0].message.content;
+
           saveHistory(query, text);
+          if (currentImageBase64) removeImage();
+
           process.style.display = "none";
           resultContent.innerHTML = marked.parse(text);
           resultArea.style.display = "block";
