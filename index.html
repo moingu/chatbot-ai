@@ -185,7 +185,7 @@
         cursor: pointer;
       }
 
-      /* HISTORY & UI */
+      /* HISTORY */
       .history-panel {
         position: fixed;
         top: 0;
@@ -231,6 +231,7 @@
         backdrop-filter: blur(2px);
       }
 
+      /* MAIN */
       #home-page,
       #app-page {
         padding-top: 80px;
@@ -263,7 +264,6 @@
         font-weight: 900;
         margin-bottom: 15px;
         margin-top: 0;
-        line-height: 1.2;
         background: linear-gradient(to right, #fff, var(--primary-color));
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
@@ -299,7 +299,7 @@
         max-width: 300px;
       }
 
-      /* APP */
+      /* APP INTERFACE */
       .app-container {
         background: rgba(20, 20, 40, 0.85);
         backdrop-filter: blur(25px);
@@ -395,7 +395,6 @@
         animation: pulse 1s infinite;
       }
 
-      /* PREVIEW ẢNH */
       #imagePreviewContainer {
         display: none;
         margin-bottom: 10px;
@@ -482,8 +481,7 @@
         font-size: 0.75rem;
       }
       .result-card h1,
-      .result-card h2,
-      .result-card h3 {
+      .result-card h2 {
         color: var(--primary-color);
         margin-top: 1.2em;
         font-size: 1.2rem;
@@ -596,7 +594,7 @@
     <div class="overlay" id="overlay" onclick="toggleHistory()"></div>
     <div class="history-panel" id="historyPanel">
       <h3 style="color: var(--primary-color)">
-        <i class="fas fa-history"></i> Lịch sử
+        <i class="fas fa-history"></i> Lịch sử tìm kiếm
       </h3>
       <div
         id="historyList"
@@ -616,7 +614,7 @@
             font-weight: bold;
           "
         >
-          Xóa
+          Xóa hết
         </button>
         <button
           onclick="toggleHistory()"
@@ -642,8 +640,8 @@
           GIÚP HỌC SINH TÌM KIẾM CÁC CÔNG THỨC VÀ HỖ TRỢ HỌC TẬP
         </p>
         <p class="student-intro">
-          "Đây là dự án STEM tâm huyết của em - học sinh lớp 9H.<br />Mong các
-          thầy cô trải nghiệm, dùng thử và đưa ra ý kiến đóng góp ạ!"
+          "Đây là dự án STEM tâm huyết của em - học sinh lớp 9H.<br />
+          Mong các thầy cô trải nghiệm, dùng thử và đưa ra ý kiến đóng góp ạ!"
         </p>
         <button class="btn-start" onclick="goToApp()">
           TRẢI NGHIỆM NGAY <i class="fas fa-rocket"></i>
@@ -705,13 +703,8 @@
             class="quick-chip"
             onclick="setInput('Dịch đoạn sau sang tiếng Việt:')"
           >
-            🌐 Dịch
+            🌐 Dịch thuật
           </div>
-        </div>
-
-        <div id="imagePreviewContainer">
-          <img id="imagePreview" src="" alt="Preview" />
-          <button id="removeImage" onclick="removeImage()">X</button>
         </div>
 
         <div class="search-box-wrapper">
@@ -745,12 +738,18 @@
           <button
             class="btn-action"
             onclick="document.getElementById('userInput').value = ''"
+            title="Xóa"
           >
             <i class="fas fa-times"></i>
           </button>
           <button class="btn-search" onclick="startSearch()">
             <i class="fas fa-paper-plane"></i>
           </button>
+        </div>
+
+        <div id="imagePreviewContainer">
+          <img id="imagePreview" src="" alt="Preview" />
+          <button id="removeImage" onclick="removeImage()">X</button>
         </div>
 
         <div class="process-area" id="processArea">
@@ -808,10 +807,9 @@
         })
         .catch((error) => console.error(error));
       document.getElementById("btnLogin").addEventListener("click", () => {
-        signInWithPopup(auth, provider).catch((error) => {
-          console.log("Popup failed, using redirect");
-          signInWithRedirect(auth, provider);
-        });
+        signInWithPopup(auth, provider).catch(() =>
+          signInWithRedirect(auth, provider)
+        );
       });
       window.signOut = signOut;
       window.auth = auth;
@@ -829,15 +827,13 @@
       });
     </script>
 
-    <!-- SCRIPT AI (SỬ DỤNG KEY GROQ MỚI & MODEL LLAMA 4) -->
+    <!-- SCRIPT AI (SỬ DỤNG KEY GROQ MỚI & MODEL LLAMA 3.3) -->
     <script>
-      // KEY GROQ MỚI NHẤT BẠN CUNG CẤP
+      // KEY GROQ MỚI NHẤT BẠN CUNG CẤP (Đã thay thế key Google bị lỗi)
       const API_KEY =
         "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";
-
       const MODEL_TEXT = "llama-3.3-70b-versatile";
-      // Model xử lý ảnh Llama 4 mới nhất để tránh lỗi decommissioned
-      const MODEL_VISION = "meta-llama/llama-4-scout-17b-16e-instruct";
+      const MODEL_VISION = "llama-3.2-90b-vision-preview";
 
       let currentImageBase64 = null;
 
@@ -939,13 +935,12 @@
           "Microsoft Zira",
           "Samantha",
           "Daniel",
-          "Natural",
           "Premium",
         ];
         if (langCode.includes("en")) {
-          for (let k of keywords) {
+          for (let keyword of prioritizedKeywords) {
             const found = voices.find(
-              (v) => v.name.includes(k) && v.lang.includes("en")
+              (v) => v.name.includes(keyword) && v.lang.includes("en")
             );
             if (found) return found;
           }
@@ -962,14 +957,8 @@
         window.speechSynthesis.cancel();
         const speech = new SpeechSynthesisUtterance(content);
         const subject = document.getElementById("subjectSelect").value;
-        let detectedLang = "vi-VN";
-        if (subject === "english") {
-          detectedLang = "en-US";
-        } else {
-          const vietnamesePattern =
-            /[àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]/i;
-          detectedLang = vietnamesePattern.test(content) ? "vi-VN" : "en-US";
-        }
+        let detectedLang = subject === "english" ? "en-US" : "vi-VN";
+
         speech.lang = detectedLang;
         if (window.speechSynthesis.getVoices().length === 0) {
           window.speechSynthesis.onvoiceschanged = () => {
@@ -1034,7 +1023,7 @@
           let roleDesc = "Bạn là trợ lý học tập thông minh.";
           if (subject === "math")
             roleDesc =
-              "Bạn là giáo viên Toán kỹ tính. Giải bài tập từng bước. Dùng dấu 'x' cho phép nhân, ':' cho phép chia, ',' cho số thập phân. Hiển thị công thức Toán bằng LaTeX (đặt trong dấu $).";
+              "Bạn là giáo viên Toán kỹ tính. Giải bài tập từng bước, sử dụng dấu 'x' (nhân), ':' (chia), ',' (thập phân). Hiển thị công thức Toán bằng LaTeX (đặt trong dấu $).";
           if (subject === "physics")
             roleDesc =
               "Bạn là giáo viên Vật Lý. Giải thích hiện tượng, công thức và thay số.";
@@ -1045,7 +1034,7 @@
             roleDesc = "Bạn là giáo viên Ngữ Văn. Phân tích hay, cảm xúc.";
           if (subject === "english")
             roleDesc =
-              "STRICT INSTRUCTION: You are an English Teacher. Response MUST be in ENGLISH (C1/C2 level). Only use Vietnamese if asked to translate.";
+              "STRICT INSTRUCTION: You are an English Teacher. Response MUST be in ENGLISH (C1/C2 level). Correct grammar errors strictly. Only use Vietnamese if asked to translate.";
 
           const systemPrompt = `
             ${roleDesc}
