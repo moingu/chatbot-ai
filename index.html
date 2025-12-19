@@ -7,11 +7,9 @@
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     />
     <title>STEAM KHOA HỌC KỸ THUẬT</title>
-
     <!-- Thư viện Markdown -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-
-    <!-- Thư viện Hiển thị Toán Học (MathJax) - MỚI -->
+    <!-- Thư viện Toán học MathJax -->
     <script>
       window.MathJax = {
         tex: {
@@ -19,14 +17,8 @@
             ["$", "$"],
             ["\\(", "\\)"],
           ],
-          displayMath: [
-            ["$$", "$$"],
-            ["\\[", "\\]"],
-          ],
         },
-        svg: {
-          fontCache: "global",
-        },
+        svg: { fontCache: "global" },
       };
     </script>
     <script
@@ -34,7 +26,7 @@
       async
       src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
     ></script>
-
+    <!-- Font Awesome & Font -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
@@ -53,7 +45,6 @@
         --glass-border: rgba(255, 255, 255, 0.1);
         --text-color: #e2e8f0;
       }
-
       body {
         font-family: "Nunito", sans-serif;
         margin: 0;
@@ -191,9 +182,10 @@
         font-size: 0.75rem;
         text-decoration: none;
         margin-left: 5px;
+        cursor: pointer;
       }
 
-      /* HISTORY */
+      /* HISTORY & UI */
       .history-panel {
         position: fixed;
         top: 0;
@@ -239,7 +231,6 @@
         backdrop-filter: blur(2px);
       }
 
-      /* MAIN */
       #home-page,
       #app-page {
         padding-top: 80px;
@@ -266,16 +257,6 @@
         border: 1px solid var(--glass-border);
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         animation: fadeIn 0.8s ease-out;
-      }
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(10px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
       }
       .hero-title {
         font-size: 2rem;
@@ -314,15 +295,11 @@
         border: none;
         cursor: pointer;
         transition: 0.3s;
-        box-shadow: 0 5px 20px rgba(189, 0, 255, 0.3);
         width: 100%;
         max-width: 300px;
       }
-      .btn-start:active {
-        transform: scale(0.98);
-      }
 
-      /* APP INTERFACE */
+      /* APP */
       .app-container {
         background: rgba(20, 20, 40, 0.85);
         backdrop-filter: blur(25px);
@@ -354,9 +331,6 @@
         width: 100%;
         margin-bottom: 5px;
       }
-      .subject-select:focus {
-        border-color: var(--primary-color);
-      }
       .quick-chip {
         background: rgba(255, 255, 255, 0.08);
         border: 1px solid var(--glass-border);
@@ -367,10 +341,6 @@
         font-size: 0.85rem;
         flex: 1 1 auto;
         text-align: center;
-      }
-      .quick-chip:active {
-        background: rgba(0, 242, 255, 0.2);
-        color: white;
       }
 
       .search-box-wrapper {
@@ -449,7 +419,6 @@
         border-radius: 50%;
         width: 20px;
         height: 20px;
-        font-size: 12px;
         cursor: pointer;
         display: flex;
         align-items: center;
@@ -481,36 +450,6 @@
         background: rgba(0, 242, 255, 0.1);
         border-left: 3px solid var(--primary-color);
         color: white;
-      }
-      .internet-step i {
-        color: #00e5ff;
-        animation: spin 2s linear infinite;
-      }
-      .robot-step i {
-        color: #facc15;
-        animation: bounce 1s infinite alternate;
-      }
-      .writing-step i {
-        color: #bd00ff;
-        animation: wobble 1s infinite;
-      }
-      @keyframes spin {
-        100% {
-          transform: rotate(360deg);
-        }
-      }
-      @keyframes bounce {
-        to {
-          transform: translateY(-5px);
-        }
-      }
-      @keyframes wobble {
-        25% {
-          transform: rotate(-15deg);
-        }
-        75% {
-          transform: rotate(15deg);
-        }
       }
 
       .result-card {
@@ -552,8 +491,6 @@
       .result-card strong {
         color: #facc15;
       }
-
-      /* Cập nhật CSS cho MathJax để hiển thị đẹp hơn */
       .result-card code {
         background: #1e293b;
         color: var(--primary-color);
@@ -576,7 +513,6 @@
         height: auto;
         border-radius: 8px;
       }
-
       .icon-btn {
         background: rgba(255, 255, 255, 0.1);
         border: 1px solid var(--glass-border);
@@ -645,7 +581,13 @@
       <div id="user-area" class="user-profile">
         <div style="text-align: right">
           <div class="user-name" id="userName">Học sinh</div>
-          <div class="btn-logout" id="btnLogout">Thoát</div>
+          <div
+            class="btn-logout"
+            id="btnLogout"
+            onclick="if(confirm('Đăng xuất?')) signOut(auth)"
+          >
+            Thoát
+          </div>
         </div>
         <img src="" id="userAvatar" class="avatar" onclick="toggleHistory()" />
       </div>
@@ -700,8 +642,8 @@
           GIÚP HỌC SINH TÌM KIẾM CÁC CÔNG THỨC VÀ HỖ TRỢ HỌC TẬP
         </p>
         <p class="student-intro">
-          "Đây là dự án STEM tâm huyết của em - học sinh lớp 9H.<br />
-          Mong các thầy cô trải nghiệm, dùng thử và đưa ra ý kiến đóng góp ạ!"
+          "Đây là dự án STEM tâm huyết của em - học sinh lớp 9H.<br />Mong các
+          thầy cô trải nghiệm, dùng thử và đưa ra ý kiến đóng góp ạ!"
         </p>
         <button class="btn-start" onclick="goToApp()">
           TRẢI NGHIỆM NGAY <i class="fas fa-rocket"></i>
@@ -767,7 +709,6 @@
           </div>
         </div>
 
-        <!-- Khu vực xem trước ảnh -->
         <div id="imagePreviewContainer">
           <img id="imagePreview" src="" alt="Preview" />
           <button id="removeImage" onclick="removeImage()">X</button>
@@ -779,8 +720,6 @@
             id="userInput"
             placeholder="Nhập câu hỏi hoặc chọn ảnh..."
           />
-
-          <!-- Nút chọn ảnh mới -->
           <input
             type="file"
             id="imageInput"
@@ -795,7 +734,6 @@
           >
             <i class="fas fa-image"></i>
           </button>
-
           <button
             class="btn-action"
             id="btnVoice"
@@ -870,15 +808,13 @@
         })
         .catch((error) => console.error(error));
       document.getElementById("btnLogin").addEventListener("click", () => {
-        // Luôn dùng Popup, nếu lỗi thì fallback (Cốc Cốc)
         signInWithPopup(auth, provider).catch((error) => {
           console.log("Popup failed, using redirect");
           signInWithRedirect(auth, provider);
         });
       });
-      document.getElementById("btnLogout").addEventListener("click", () => {
-        if (confirm("Đăng xuất?")) signOut(auth);
-      });
+      window.signOut = signOut;
+      window.auth = auth;
       onAuthStateChanged(auth, (user) => {
         document.getElementById("login-area").style.display = user
           ? "none"
@@ -893,11 +829,14 @@
       });
     </script>
 
-    <!-- SCRIPT AI (VISION UPDATE & PROMPT UPDATE) -->
+    <!-- SCRIPT AI (SỬ DỤNG KEY GROQ MỚI & MODEL LLAMA 4) -->
     <script>
+      // KEY GROQ MỚI NHẤT BẠN CUNG CẤP
       const API_KEY =
-        "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";
+        "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";
+
       const MODEL_TEXT = "llama-3.3-70b-versatile";
+      // Model xử lý ảnh Llama 4 mới nhất để tránh lỗi decommissioned
       const MODEL_VISION = "meta-llama/llama-4-scout-17b-16e-instruct";
 
       let currentImageBase64 = null;
@@ -1004,9 +943,9 @@
           "Premium",
         ];
         if (langCode.includes("en")) {
-          for (let keyword of prioritizedKeywords) {
+          for (let k of keywords) {
             const found = voices.find(
-              (v) => v.name.includes(keyword) && v.lang.includes("en")
+              (v) => v.name.includes(k) && v.lang.includes("en")
             );
             if (found) return found;
           }
@@ -1016,17 +955,14 @@
 
       function readResult() {
         let content = document.getElementById("resultContent").innerText;
-        // Xóa emoji trước khi đọc
         content = content.replace(
           /[\u{1F600}-\u{1F6FF}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F900}-\u{1F9FF}\u{1F018}-\u{1F270}]/gu,
           ""
         );
-
         window.speechSynthesis.cancel();
         const speech = new SpeechSynthesisUtterance(content);
         const subject = document.getElementById("subjectSelect").value;
         let detectedLang = "vi-VN";
-
         if (subject === "english") {
           detectedLang = "en-US";
         } else {
@@ -1035,19 +971,14 @@
           detectedLang = vietnamesePattern.test(content) ? "vi-VN" : "en-US";
         }
         speech.lang = detectedLang;
-
         if (window.speechSynthesis.getVoices().length === 0) {
           window.speechSynthesis.onvoiceschanged = () => {
-            const voice = getBestVoice(detectedLang);
-            if (voice) speech.voice = voice;
+            speech.voice = getBestVoice(detectedLang);
             window.speechSynthesis.speak(speech);
           };
         } else {
-          const voice = getBestVoice(detectedLang);
-          if (voice) speech.voice = voice;
-          if (detectedLang === "en-US") {
-            speech.rate = 0.9;
-          }
+          speech.voice = getBestVoice(detectedLang);
+          if (detectedLang === "en-US") speech.rate = 0.9;
           window.speechSynthesis.speak(speech);
         }
       }
@@ -1062,13 +993,8 @@
         const subject = document.getElementById("subjectSelect").value;
         recognition.lang = subject === "english" ? "en-US" : "vi-VN";
         recognition.continuous = false;
-        recognition.interimResults = false;
-        recognition.onstart = () => {
-          btn.classList.add("mic-active");
-        };
-        recognition.onend = () => {
-          btn.classList.remove("mic-active");
-        };
+        recognition.onstart = () => btn.classList.add("mic-active");
+        recognition.onend = () => btn.classList.remove("mic-active");
         recognition.onresult = (event) => {
           document.getElementById("userInput").value =
             event.results[0][0].transcript;
@@ -1108,7 +1034,7 @@
           let roleDesc = "Bạn là trợ lý học tập thông minh.";
           if (subject === "math")
             roleDesc =
-              "Bạn là giáo viên Toán thân thiện. Giải bài tập từng bước, sử dụng định dạng LaTeX cho công thức toán (đặt trong dấu $ hoặc $$). Dùng dấu 'x' (nhân), ':' (chia), ',' (thập phân).";
+              "Bạn là giáo viên Toán kỹ tính. Giải bài tập từng bước. Dùng dấu 'x' cho phép nhân, ':' cho phép chia, ',' cho số thập phân. Hiển thị công thức Toán bằng LaTeX (đặt trong dấu $).";
           if (subject === "physics")
             roleDesc =
               "Bạn là giáo viên Vật Lý. Giải thích hiện tượng, công thức và thay số.";
@@ -1119,12 +1045,11 @@
             roleDesc = "Bạn là giáo viên Ngữ Văn. Phân tích hay, cảm xúc.";
           if (subject === "english")
             roleDesc =
-              "STRICT INSTRUCTION: You are an English Teacher. Response MUST be in ENGLISH (C1/C2 level). Correct grammar errors strictly. Only use Vietnamese if asked to translate.";
+              "STRICT INSTRUCTION: You are an English Teacher. Response MUST be in ENGLISH (C1/C2 level). Only use Vietnamese if asked to translate.";
 
           const systemPrompt = `
             ${roleDesc}
             LƯU Ý QUAN TRỌNG: Hiện tại là năm 2025, Việt Nam đã thực hiện sáp nhập và chỉ còn **34 tỉnh thành**. Tuyệt đối không trả lời là 63.
-            
             Luôn tuân thủ quy tắc SGK Việt Nam (Kết nối tri thức).
             Trình bày bằng Markdown, dùng Emoji để bài học sinh động.
           `;
@@ -1140,10 +1065,17 @@
                 {
                   role: "user",
                   content: [
-                    { type: "text", text: systemPrompt + "\n" + query },
+                    {
+                      type: "text",
+                      text: systemPrompt + "\n\nCâu hỏi: " + query,
+                    },
                     {
                       type: "image_url",
-                      image_url: { url: currentImageBase64 },
+                      image_url: {
+                        url:
+                          "data:image/jpeg;base64," +
+                          currentImageBase64.split(",")[1],
+                      },
                     },
                   ],
                 },
@@ -1184,12 +1116,7 @@
           resultContent.innerHTML = marked.parse(text);
           resultArea.style.display = "block";
 
-          // Kích hoạt MathJax để hiển thị công thức đẹp
-          if (window.MathJax) {
-            MathJax.typesetPromise([resultContent]).catch((err) =>
-              console.log(err)
-            );
-          }
+          if (window.MathJax) MathJax.typesetPromise([resultContent]);
         } catch (e) {
           console.error(e);
           process.style.display = "none";
